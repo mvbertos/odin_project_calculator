@@ -27,6 +27,8 @@ function setOperator(value) {
   if (value === "=") {
     operate(n1Val, opVal, n2Val);
     return;
+  } else if (value === "CE") {
+    return;
   }
   opVal = value;
   setDisplayText(n1Val, opVal, n2Val);
@@ -52,15 +54,10 @@ function clearValues() {
 const numberPad = document.querySelector("#numberPad");
 
 function initNumberPad() {
-  const numbers = "1234567890";
-  numbers.split("").forEach((num) => {
-    let btn = document.createElement("button");
-    btn.textContent = num;
-    btn.id = num;
+  document.querySelectorAll("#numberPad button").forEach((btn) => {
     btn.addEventListener("click", () => {
-      setNumber(btn.id);
+      setNumber(btn.textContent);
     });
-    numberPad.appendChild(btn);
   });
 }
 
