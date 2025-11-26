@@ -96,7 +96,7 @@ function operate(a, op, b) {
     case "-":
       result = substract(parsedA, parsedB);
       break;
-    case "%":
+    case "÷":
       result = divide(parsedA, parsedB);
       break;
     case "x":
