@@ -24,15 +24,15 @@ function initOperator() {
   });
 }
 function setOperator(value) {
-  if (value === "=") {
-    operate(n1Val, opVal, n2Val);
-    return;
-  } else if (value === "CE") {
-    return;
-  }
   opVal = value;
   setDisplayText(n1Val, opVal, n2Val);
 }
+
+// Equal Button
+const equalButton = document.querySelector("#equalButton");
+equalButton.addEventListener("click", () => {
+  operate(n1Val, opVal, n2Val);
+});
 
 //Display
 const display = document.querySelector("#display");
@@ -41,6 +41,7 @@ function setDisplayText(n1 = " ", op = " ", n2 = "") {
 }
 
 //Clear Values
+
 const clrButton = document.querySelector("#clrButton");
 clrButton.addEventListener("click", () => clearValues());
 function clearValues() {
