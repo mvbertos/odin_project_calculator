@@ -48,6 +48,16 @@ function clearValues() {
   n1Val = "";
   n2Val = "";
   opVal = "";
+  console.log(
+    "This is a log to show that the values has being cleanse." +
+      "\n n1:" +
+      n1Val +
+      "\n operator" +
+      opVal +
+      "\n n2:" +
+      n2Val
+  );
+
   setDisplayText(n1Val, opVal, n2Val);
 }
 
@@ -115,7 +125,15 @@ function operate(a = 1, op = "", b = 1) {
   }
   if (result != "") {
     clearValues();
-    setNumber(result.toFixed(2).replace(/\.?0$/, "")); //now I know this looks ugly, but i wanted to make it the more compact as possible here.
+    setNumber(formatNumber(result)); //now I know this looks ugly, but i wanted to make it the more compact as possible here.
+  }
+}
+
+function formatNumber(value) {
+  if (Number.isInteger(value)) {
+    return value;
+  } else {
+    return value.toFixed(2).replace(/\.?0$/, "");
   }
 }
 
