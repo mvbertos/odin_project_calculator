@@ -25,7 +25,7 @@ function initOperator() {
 }
 function setOperator(value) {
   opVal = value;
-  setDisplayText(n1Val, opVal, n2Val);
+  displayOperationText(n1Val, opVal, n2Val);
 }
 
 // Equal Button
@@ -36,7 +36,7 @@ equalButton.addEventListener("click", () => {
 
 //Display
 const display = document.querySelector("#display");
-function setDisplayText(n1 = " ", op = " ", n2 = "") {
+function displayOperationText(n1 = " ", op = " ", n2 = "") {
   display.value = n1 + op + n2;
 }
 
@@ -58,7 +58,7 @@ function clearValues() {
       n2Val
   );
 
-  setDisplayText(n1Val, opVal, n2Val);
+  displayOperationText(n1Val, opVal, n2Val);
 }
 
 //Number Pad
@@ -78,7 +78,7 @@ function setNumber(value) {
   } else {
     n2Val += value;
   }
-  setDisplayText(n1Val, opVal, n2Val);
+  displayOperationText(n1Val, opVal, n2Val);
 }
 
 //Operators
@@ -130,7 +130,7 @@ function operate(a = 1, op = "", b = 1) {
   }
   if (result != "") {
     clearValues();
-    setNumber(formatNumber(result));
+    display.value = formatNumber(result);
   }
 }
 
