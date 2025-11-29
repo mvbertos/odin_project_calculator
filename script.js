@@ -97,35 +97,40 @@ function divide(a, b) {
 
 function operate(a = 1, op = "", b = 1) {
   if (a == "" || op == "" || b == "") {
-    console.log(
-      "an operation requires a number, operator and a seconde number to work."
+    alert(
+      "An operation requires a number, operator and a second number to work.\n Example: 2+2, 25*2, etc..."
     );
     return;
   }
 
   let result = 0;
-  let parsedA = parseInt(a);
-  let parsedB = parseInt(b);
+  let n1 = parseInt(a);
+  let n2 = parseInt(b);
   switch (op) {
     case "+":
-      result = add(parsedA, parsedB);
+      result = add(n1, n2);
       break;
     case "-":
-      result = substract(parsedA, parsedB);
+      result = substract(n1, n2);
       break;
     case "÷":
-      result = divide(parsedA, parsedB);
+      if (n1 == 0 || n2 == 0) {
+        alert("0 values cannot be divided in this simple calculator.");
+        return;
+      }
+
+      result = divide(n1, n2);
       break;
     case "x":
-      result = multiply(parsedA, parsedB);
+      result = multiply(n1, n2);
       break;
     default:
-      console.log("Operator is not valid or missing.");
+      alert("Operator is not valid or missing.");
       return;
   }
   if (result != "") {
     clearValues();
-    setNumber(formatNumber(result)); //now I know this looks ugly, but i wanted to make it the more compact as possible here.
+    setNumber(formatNumber(result));
   }
 }
 
