@@ -24,6 +24,10 @@ function initOperator() {
   });
 }
 function setOperator(value) {
+  if (n1Val == "") {
+    alert("Add a number before adding an operator.");
+    return;
+  }
   opVal = value;
   displayOperationText(n1Val, opVal, n2Val);
 }
