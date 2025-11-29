@@ -86,7 +86,7 @@ function divide(a, b) {
 }
 
 function operate(a, op, b) {
-  let result = "";
+  let result = 0;
   let parsedA = parseInt(a);
   let parsedB = parseInt(b);
   switch (op) {
@@ -108,7 +108,7 @@ function operate(a, op, b) {
   }
   if (result != "") {
     clearValues();
-    setNumber(result);
+    setNumber(result.toFixed(3));
   }
 }
 
