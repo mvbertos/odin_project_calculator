@@ -87,7 +87,9 @@ function divide(a, b) {
 
 function operate(a = 1, op = "", b = 1) {
   if (a == "" || op == "" || b == "") {
-    console.log("an operation requires a number, operator and a seconde number to work.");
+    console.log(
+      "an operation requires a number, operator and a seconde number to work."
+    );
     return;
   }
 
@@ -113,7 +115,7 @@ function operate(a = 1, op = "", b = 1) {
   }
   if (result != "") {
     clearValues();
-    setNumber(result.toFixed(3));
+    setNumber(result.toFixed(2).replace(/\.?0$/, "")); //now I know this looks ugly, but i wanted to make it the more compact as possible here.
   }
 }
 
