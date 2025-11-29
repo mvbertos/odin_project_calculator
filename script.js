@@ -85,7 +85,12 @@ function divide(a, b) {
   return a / b;
 }
 
-function operate(a, op, b) {
+function operate(a = 1, op = "", b = 1) {
+  if (a == "" || op == "" || b == "") {
+    console.log("an operation requires a number, operator and a seconde number to work.");
+    return;
+  }
+
   let result = 0;
   let parsedA = parseInt(a);
   let parsedB = parseInt(b);
