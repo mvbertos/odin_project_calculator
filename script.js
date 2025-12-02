@@ -132,10 +132,9 @@ function operate(a = 1, op = "", b = 1) {
       alert("Operator is not valid or missing.");
       return;
   }
-  if (result != "") {
-    clearValues();
-    display.value = formatNumber(result);
-  }
+  clearValues();
+  console.log(result);
+  display.value = formatNumber(result);
 }
 
 function formatNumber(value) {
