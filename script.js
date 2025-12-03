@@ -24,12 +24,19 @@ function initOperator() {
   });
 }
 function setOperator(value) {
-  if (n1Val == "") {
+  if (!isValueValid(n1Val) == false) {
     alert("Add a number before adding an operator.");
     return;
   }
   opVal = value;
-  displayOperationText(n1Val, opVal, n2Val);
+
+  if (n2Val != "") {
+    operate(n1Val, opVal, n2Val);
+  }
+}
+
+function isValueValid(val) {
+  return !Number.isNaN(val);
 }
 
 // Equal Button
@@ -79,10 +86,11 @@ function initNumberPad() {
 function setNumber(value) {
   if (opVal === "") {
     n1Val += value;
+    display.value = n1Val;
   } else {
     n2Val += value;
+    operate(n1Val, opVal, n2Val);
   }
-  displayOperationText(n1Val, opVal, n2Val);
 }
 
 //Operators
@@ -100,7 +108,7 @@ function divide(a, b) {
 }
 
 function operate(a = 1, op = "", b = 1) {
-  if (a == "" || op == "" || b == "") {
+  if (!isValueValid(a) || op == "" || !isValueValid(b)) {
     alert(
       "An operation requires a number, operator and a second number to work.\n Example: 2+2, 25*2, etc..."
     );
@@ -132,8 +140,13 @@ function operate(a = 1, op = "", b = 1) {
       alert("Operator is not valid or missing.");
       return;
   }
-  clearValues();
-  console.log(result);
+  setResult(result);
+}
+
+//Setup the result to the next operation
+function setResult(result) {
+  n1Val = result;
+  n2Val = "";
   display.value = formatNumber(result);
 }
 
