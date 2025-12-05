@@ -5,7 +5,7 @@
 //it will use one of the implemented operation and display the result later
 //the user input will be displayed at the display
 let inputtingN1 = true;
-let curInput = "";
+let curInputVal = "";
 let n1Val = "";
 let opVal = "";
 let n2Val = "";
@@ -31,8 +31,9 @@ function setOperator(value) {
     return;
   }
   opVal = value;
-  setNumber(curInput);
+  setNumber(curInputVal);
   setInputOrder(!inputtingN1);
+  display.value = value;
 }
 
 function setInputOrder(value = false) {
@@ -51,9 +52,16 @@ function isValueValid(val) {
 // Equal Button
 const equalButton = document.querySelector("#equalButton");
 equalButton.addEventListener("click", () => {
-  setNumber(curInput);
-  operate(n1Val, opVal, n2Val);
+  onEqualButtonPressed();
 });
+
+function onEqualButtonPressed() {
+  setNumber(curInputVal);
+  setInputOrder(true);
+  let result = operate(n1Val, opVal, n2Val);
+  curInputVal = result;
+  display.value = curInputVal;
+}
 
 //Display
 const display = document.querySelector("#display");
@@ -68,7 +76,7 @@ function clearValues() {
   n1Val = "";
   n2Val = "";
   opVal = "";
-  curInput = "";
+  curInputVal = "";
   display.value = "";
 }
 
@@ -84,8 +92,8 @@ function initNumberPad() {
 }
 
 function onNumberPresset(value) {
-  curInput += value;
-  display.value = curInput;
+  curInputVal += value;
+  display.value = curInputVal;
 }
 
 /**
@@ -96,8 +104,6 @@ function setNumber(value) {
   if (!isValueValid(value)) {
     return;
   }
-
-  curInput = "";
   if (inputtingN1) {
     //set n1 if operator is empty
     n1Val = value.toString();
@@ -106,7 +112,7 @@ function setNumber(value) {
     n2Val = value.toString();
     console.log("set n2val to:" + n2Val);
   }
-  display.value;
+  curInputVal = "";
 }
 
 //Operators
@@ -159,15 +165,8 @@ function operate(a = 1, op = "", b = 1) {
       alert("Operator is not valid or missing.");
       return;
   }
-  setResult(result);
-}
-
-//Setup the result to the next operation
-function setResult(result) {
   console.log("result:" + result);
-  setInputOrder(true);
-  curInput = result;
-  display.value = formatNumber(curInput);
+  return result;
 }
 
 function formatNumber(value) {
