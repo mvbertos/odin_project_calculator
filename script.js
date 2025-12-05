@@ -4,6 +4,8 @@
 //when pressed '=' the operate function will be called
 //it will use one of the implemented operation and display the result later
 //the user input will be displayed at the display
+let inputtingN1 = true;
+let curInput = "";
 let n1Val = "";
 let opVal = "";
 let n2Val = "";
@@ -24,24 +26,32 @@ function initOperator() {
   });
 }
 function setOperator(value) {
-  if (!isValueValid(n1Val) == false) {
+  if (!isValueValid(n1Val)) {
     alert("Add a number before adding an operator.");
     return;
   }
   opVal = value;
+  setNumber(curInput);
+  setInputOrder(!inputtingN1);
+}
 
-  if (n2Val != "") {
-    operate(n1Val, opVal, n2Val);
-  }
+function setInputOrder(value = false) {
+  inputtingN1 = value;
+  console.log("inputting on n1Val set: " + inputtingN1);
 }
 
 function isValueValid(val) {
-  return !Number.isNaN(val);
+  if (isNaN(val) && isNaN(parseFloat(val))) {
+    console.warn(val + " is not a valid number!");
+    return false;
+  }
+  return true;
 }
 
 // Equal Button
 const equalButton = document.querySelector("#equalButton");
 equalButton.addEventListener("click", () => {
+  setNumber(curInput);
   operate(n1Val, opVal, n2Val);
 });
 
@@ -52,24 +62,14 @@ function displayOperationText(n1 = " ", op = " ", n2 = "") {
 }
 
 //Clear Values
-
 const clrButton = document.querySelector("#clrButton");
 clrButton.addEventListener("click", () => clearValues());
 function clearValues() {
   n1Val = "";
   n2Val = "";
   opVal = "";
-  console.log(
-    "This is a log to show that the values has being cleanse." +
-      "\n n1:" +
-      n1Val +
-      "\n operator" +
-      opVal +
-      "\n n2:" +
-      n2Val
-  );
-
-  displayOperationText(n1Val, opVal, n2Val);
+  curInput = "";
+  display.value = "";
 }
 
 //Number Pad
@@ -78,19 +78,35 @@ const numberPad = document.querySelector("#numberPad");
 function initNumberPad() {
   document.querySelectorAll("#numberPad button").forEach((btn) => {
     btn.addEventListener("click", () => {
-      setNumber(btn.textContent);
+      onNumberPresset(btn.textContent);
     });
   });
 }
 
+function onNumberPresset(value) {
+  curInput += value;
+  display.value = curInput;
+}
+
+/**
+ * Use full values to set a number
+ * @param {*} value
+ */
 function setNumber(value) {
-  if (opVal === "") {
-    n1Val += value;
-    display.value = n1Val;
-  } else {
-    n2Val += value;
-    operate(n1Val, opVal, n2Val);
+  if (!isValueValid(value)) {
+    return;
   }
+
+  curInput = "";
+  if (inputtingN1) {
+    //set n1 if operator is empty
+    n1Val = value.toString();
+    console.log("set n1val to:" + n1Val);
+  } else {
+    n2Val = value.toString();
+    console.log("set n2val to:" + n2Val);
+  }
+  display.value;
 }
 
 //Operators
@@ -118,6 +134,9 @@ function operate(a = 1, op = "", b = 1) {
   let result = 0;
   let n1 = parseInt(a);
   let n2 = parseInt(b);
+
+  console.log(n1 + opVal + n2);
+
   switch (op) {
     case "+":
       result = add(n1, n2);
@@ -145,9 +164,10 @@ function operate(a = 1, op = "", b = 1) {
 
 //Setup the result to the next operation
 function setResult(result) {
-  n1Val = result;
-  n2Val = "";
-  display.value = formatNumber(result);
+  console.log("result:" + result);
+  setInputOrder(true);
+  curInput = result;
+  display.value = formatNumber(curInput);
 }
 
 function formatNumber(value) {
