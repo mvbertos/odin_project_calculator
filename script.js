@@ -26,14 +26,14 @@ function initOperator() {
   });
 }
 function setOperator(value) {
+  setNumber(curInputVal);
+  setInputOrder(!inputtingN1);
+  display.value = value;
   if (!isValueValid(n1Val)) {
     alert("Add a number before adding an operator.");
     return;
   }
   opVal = value;
-  setNumber(curInputVal);
-  setInputOrder(!inputtingN1);
-  display.value = value;
 }
 
 function setInputOrder(value = false) {
@@ -42,8 +42,14 @@ function setInputOrder(value = false) {
 }
 
 function isValueValid(val) {
+  console.log("validating:" + val);
+
+  if (typeof val != "string" || val === "") {
+    console.error("you tried to validade a non string value or a empty value");
+    return false;
+  }
   if (isNaN(val) && isNaN(parseFloat(val))) {
-    console.warn(val + " is not a valid number!");
+    console.error(val + " is not a valid number!");
     return false;
   }
   return true;
@@ -59,8 +65,9 @@ function onEqualButtonPressed() {
   setNumber(curInputVal);
   setInputOrder(true);
   let result = operate(n1Val, opVal, n2Val);
-  curInputVal = result;
-  display.value = curInputVal;
+  setNumber(result);
+  setInputOrder(false);
+  display.value = result;
 }
 
 //Display
@@ -101,6 +108,8 @@ function onNumberPresset(value) {
  * @param {*} value
  */
 function setNumber(value) {
+  console.log("setting:" + value);
+
   if (!isValueValid(value)) {
     return;
   }
@@ -129,15 +138,15 @@ function divide(a, b) {
   return a / b;
 }
 
-function operate(a = 1, op = "", b = 1) {
+function operate(a = "", op = "", b = "") {
+  let result = "";
   if (!isValueValid(a) || op == "" || !isValueValid(b)) {
     alert(
       "An operation requires a number, operator and a second number to work.\n Example: 2+2, 25*2, etc..."
     );
-    return;
+    return result;
   }
 
-  let result = 0;
   let n1 = parseInt(a);
   let n2 = parseInt(b);
 
@@ -153,9 +162,8 @@ function operate(a = 1, op = "", b = 1) {
     case "÷":
       if (n1 == 0 || n2 == 0) {
         alert("0 values cannot be divided in this simple calculator.");
-        return;
+        return result;
       }
-
       result = divide(n1, n2);
       break;
     case "x":
@@ -163,10 +171,10 @@ function operate(a = 1, op = "", b = 1) {
       break;
     default:
       alert("Operator is not valid or missing.");
-      return;
+      return result;
   }
   console.log("result:" + result);
-  return result;
+  return result.toString();
 }
 
 function formatNumber(value) {
