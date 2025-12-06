@@ -10,22 +10,27 @@ let n1Val = "";
 let opVal = "";
 let n2Val = "";
 
+//Display
+const display = document.querySelector("#display");
+
 function initCalculator() {
   initNumberPad();
   initOperator();
 }
 
-//Operator
+//INPUTS
+//OperatorPad
 const operatorPad = document.querySelector("#operatorPad");
 function initOperator() {
   let buttons = operatorPad.querySelectorAll("button");
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      setOperator(button.textContent);
+      onOperatorPressed(button.textContent);
     });
   });
 }
-function setOperator(value) {
+
+function onOperatorPressed(value) {
   setNumber(curInputVal);
   setInputOrder(!inputtingN1);
   display.value = value;
@@ -36,25 +41,6 @@ function setOperator(value) {
   opVal = value;
 }
 
-function setInputOrder(value = false) {
-  inputtingN1 = value;
-  console.log("inputting on n1Val set: " + inputtingN1);
-}
-
-function isValueValid(val) {
-  console.log("validating:" + val);
-
-  if (typeof val != "string" || val === "") {
-    console.error("you tried to validade a non string value or a empty value");
-    return false;
-  }
-  if (isNaN(val) && isNaN(parseFloat(val))) {
-    console.error(val + " is not a valid number!");
-    return false;
-  }
-  return true;
-}
-
 // Equal Button
 const equalButton = document.querySelector("#equalButton");
 equalButton.addEventListener("click", () => {
@@ -63,44 +49,43 @@ equalButton.addEventListener("click", () => {
 
 function onEqualButtonPressed() {
   setNumber(curInputVal);
-  setInputOrder(true);
   let result = operate(n1Val, opVal, n2Val);
+  setInputOrder(true); //n1val
   setNumber(result);
-  setInputOrder(false);
   display.value = result;
-}
-
-//Display
-const display = document.querySelector("#display");
-function displayOperationText(n1 = " ", op = " ", n2 = "") {
-  display.value = n1 + op + n2;
 }
 
 //Clear Values
 const clrButton = document.querySelector("#clrButton");
 clrButton.addEventListener("click", () => clearValues());
+
+//Number Pad
+const numberPad = document.querySelector("#numberPad");
+function initNumberPad() {
+  document.querySelectorAll("#numberPad button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      onNumberPressed(btn.textContent);
+    });
+  });
+}
+
+function onNumberPressed(value) {
+  curInputVal += value;
+  display.value = curInputVal;
+}
+
+//SETTERS
+
+/**
+ * Clears all values inputted by the user
+ * this include the display value.
+ */
 function clearValues() {
   n1Val = "";
   n2Val = "";
   opVal = "";
   curInputVal = "";
   display.value = "";
-}
-
-//Number Pad
-const numberPad = document.querySelector("#numberPad");
-
-function initNumberPad() {
-  document.querySelectorAll("#numberPad button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      onNumberPresset(btn.textContent);
-    });
-  });
-}
-
-function onNumberPresset(value) {
-  curInputVal += value;
-  display.value = curInputVal;
 }
 
 /**
@@ -124,35 +109,33 @@ function setNumber(value) {
   curInputVal = "";
 }
 
-//Operators
-function add(a, b) {
-  return a + b;
-}
-function substract(a, b) {
-  return a - b;
-}
-function multiply(a, b) {
-  return a * b;
-}
-function divide(a, b) {
-  return a / b;
+function setInputOrder(value = false) {
+  inputtingN1 = value;
+  console.log("inputting on n1Val set: " + inputtingN1);
 }
 
-function operate(a = "", op = "", b = "") {
+//OPERATION
+/**
+ * operate will receives any parameters because it uses the n1val, opval and n2val
+ * this is a fixed rule to not get lost between variables when the operation is being done
+ * "yeah I did got lost once"
+ * @returns
+ */
+function operate() {
   let result = "";
-  if (!isValueValid(a) || op == "" || !isValueValid(b)) {
+  if (!isValueValid(n1Val) || opVal == "" || !isValueValid(n2Val)) {
     alert(
       "An operation requires a number, operator and a second number to work.\n Example: 2+2, 25*2, etc..."
     );
     return result;
   }
 
-  let n1 = parseInt(a);
-  let n2 = parseInt(b);
+  let n1 = parseInt(n1Val);
+  let n2 = parseInt(n2Val);
 
   console.log(n1 + opVal + n2);
 
-  switch (op) {
+  switch (opVal) {
     case "+":
       result = add(n1, n2);
       break;
@@ -177,7 +160,27 @@ function operate(a = "", op = "", b = "") {
   return result.toString();
 }
 
-function formatNumber(value) {
+//operations
+function add(a, b) {
+  return a + b;
+}
+function substract(a, b) {
+  return a - b;
+}
+function multiply(a, b) {
+  return a * b;
+}
+function divide(a, b) {
+  return a / b;
+}
+
+//FORMAT AND VALIDATE
+/**
+ * it will get the number on a string and fix to two decimals or a full integer
+ * @param {*} value - preferable string
+ * @returns
+ */
+function formatNumber(value = "") {
   if (Number.isInteger(value)) {
     return value;
   } else {
@@ -185,4 +188,25 @@ function formatNumber(value) {
   }
 }
 
+/**
+ * it will check if parameter is a valid number
+ * @param {*} val - only string
+ * @returns
+ */
+
+function isValueValid(val) {
+  console.log("validating:" + val);
+
+  if (typeof val != "string" || val === "") {
+    console.error("you tried to validade a non string value or a empty value");
+    return false;
+  }
+  if (isNaN(val) && isNaN(parseFloat(val))) {
+    console.error(val + " is not a valid number!");
+    return false;
+  }
+  return true;
+}
+
+//EXECUTE
 initCalculator();
