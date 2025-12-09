@@ -137,6 +137,11 @@ function onNumberPressed(value) {
 
 //Operate
 function operate(a, b, op) {
+  if (isNaN(parseFloat(a)) || isNaN(parseFloat(b))) {
+    alert("you must input two values/numbers to proceed.");
+    clearValues();
+    return;
+  }
   a = parseFloat(a);
   b = parseFloat(b);
   let result = "";
