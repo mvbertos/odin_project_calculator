@@ -22,9 +22,11 @@ function initOperator() {
 }
 
 function onOperatorPressed(value) {
-  storedVal = currentVal;
-  currentOp = value;
+  if (currentOp == null) {
+    storedVal = currentVal;
+  }
   currentVal = "";
+  currentOp = value;
 }
 
 // Equal Button
@@ -122,10 +124,18 @@ function divide(a, b) {
 function formatNumber(value = "") {
   if (!isNaN(parseFloat(value))) {
     let round = Math.round(value * 100) / 100;
-    return round.toString().replace(/\.?0+$/, "");
+    console.log("round value:" + round);
+
+    let formattedRound = round
+      .toString()
+      .replace(/(\.\d*?[1-9])0+$|\.0*$/, "$1");
+    console.log("formatted round:" + formattedRound);
+
+    return formattedRound;
+  } else {
+    console.error("tried to format a non number value " + value);
+    return value;
   }
-  console.error("tried to format a non number value " + value);
-  return value;
 }
 
 //EXECUTE
