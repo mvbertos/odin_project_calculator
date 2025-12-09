@@ -2,6 +2,21 @@ let storedVal = "";
 let currentVal = "";
 let currentOp = null;
 
+//Backspace
+const BackspaceButton = document.querySelector("#backspaceButton");
+BackspaceButton.addEventListener("click", () => {
+  onBackpacePressed();
+});
+
+function onBackpacePressed() {
+  if (currentVal !== "") {
+    currentVal = currentVal.slice(0, -1);
+    display.value = currentVal;
+  } else {
+    clearValues();
+  }
+}
+
 //DotButton
 const dotButton = document.querySelector("#dotButton");
 dotButton.addEventListener("click", () => {
