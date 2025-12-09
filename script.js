@@ -2,6 +2,23 @@ let storedVal = "";
 let currentVal = "";
 let currentOp = null;
 
+//DotButton
+const dotButton = document.querySelector("#dotButton");
+dotButton.addEventListener("click", () => {
+  onDotButtonPressed();
+});
+
+function onDotButtonPressed() {
+  if (currentVal.includes(".")) {
+    return;
+  } else {
+    clearValues();
+    if (currentVal === "") currentVal = "0";
+    currentVal += ".";
+    display.value = currentVal;
+  }
+}
+
 //Display
 const display = document.querySelector("#display");
 
