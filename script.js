@@ -4,11 +4,9 @@
 //when pressed '=' the operate function will be called
 //it will use one of the implemented operation and display the result later
 //the user input will be displayed at the display
-let inputtingN1 = true;
-let curInputVal = "";
-let n1Val = "";
-let opVal = "";
-let n2Val = "";
+let storedVal = "";
+let currentVal = "";
+let currentOp = null;
 
 //Display
 const display = document.querySelector("#display");
@@ -31,14 +29,9 @@ function initOperator() {
 }
 
 function onOperatorPressed(value) {
-  setNumber(curInputVal);
-  setInputOrder(!inputtingN1);
-  display.value = value;
-  if (!isValueValid(n1Val)) {
-    alert("Add a number before adding an operator.");
-    return;
-  }
-  opVal = value;
+  storedVal = currentVal;
+  currentOp = value;
+  currentVal = "";
 }
 
 // Equal Button
@@ -48,11 +41,10 @@ equalButton.addEventListener("click", () => {
 });
 
 function onEqualButtonPressed() {
-  setNumber(curInputVal);
-  let result = operate(n1Val, opVal, n2Val);
-  setInputOrder(true); //n1val
-  setNumber(result);
-  display.value = result;
+  if (currentOp) {
+    storedVal = operate(storedVal, currentVal, currentOp);
+    display.value = storedVal.toString();
+  }
 }
 
 //Clear Values
@@ -70,48 +62,21 @@ function initNumberPad() {
 }
 
 function onNumberPressed(value) {
-  curInputVal += value;
-  display.value = curInputVal;
+  //here only will be stored the values so...
+  currentVal += value;
+  display.value = currentVal;
 }
 
 //SETTERS
-
 /**
  * Clears all values inputted by the user
  * this include the display value.
  */
 function clearValues() {
-  n1Val = "";
-  n2Val = "";
-  opVal = "";
-  curInputVal = "";
+  currentOp = null;
+  currentVal = "";
+  storedVal = "";
   display.value = "";
-}
-
-/**
- * Use full values to set a number
- * @param {*} value
- */
-function setNumber(value) {
-  console.log("setting:" + value);
-
-  if (!isValueValid(value)) {
-    return;
-  }
-  if (inputtingN1) {
-    //set n1 if operator is empty
-    n1Val = value.toString();
-    console.log("set n1val to:" + n1Val);
-  } else {
-    n2Val = value.toString();
-    console.log("set n2val to:" + n2Val);
-  }
-  curInputVal = "";
-}
-
-function setInputOrder(value = false) {
-  inputtingN1 = value;
-  console.log("inputting on n1Val set: " + inputtingN1);
 }
 
 //OPERATION
@@ -121,21 +86,13 @@ function setInputOrder(value = false) {
  * "yeah I did got lost once"
  * @returns
  */
-function operate() {
+function operate(a, b, op) {
   let result = "";
-  if (!isValueValid(n1Val) || opVal == "" || !isValueValid(n2Val)) {
-    alert(
-      "An operation requires a number, operator and a second number to work.\n Example: 2+2, 25*2, etc..."
-    );
-    return result;
-  }
+  let n1 = parseInt(a);
+  let n2 = parseInt(b);
+  console.log(n1 + op + n2);
 
-  let n1 = parseInt(n1Val);
-  let n2 = parseInt(n2Val);
-
-  console.log(n1 + opVal + n2);
-
-  switch (opVal) {
+  switch (op) {
     case "+":
       result = add(n1, n2);
       break;
@@ -145,6 +102,7 @@ function operate() {
     case "÷":
       if (n1 == 0 || n2 == 0) {
         alert("0 values cannot be divided in this simple calculator.");
+        clearValues();
         return result;
       }
       result = divide(n1, n2);
@@ -154,10 +112,10 @@ function operate() {
       break;
     default:
       alert("Operator is not valid or missing.");
-      return result;
+      break;
   }
   console.log("result:" + result);
-  return result.toString();
+  return result;
 }
 
 //operations
@@ -181,32 +139,33 @@ function divide(a, b) {
  * @returns
  */
 function formatNumber(value = "") {
-  if (Number.isInteger(value)) {
-    return value;
-  } else {
-    return value.toFixed(2).replace(/\.?0$/, "");
-  }
+  // if (Number.isInteger(value)) {
+  //   return value;
+  // } else {
+  //   return value.toFixed(2).replace(/\.?0$/, "");
+  // }
+  return value;
 }
 
-/**
- * it will check if parameter is a valid number
- * @param {*} val - only string
- * @returns
- */
+// /**
+//  * it will check if parameter is a valid number
+//  * @param {*} val - only string
+//  * @returns
+//  */
 
-function isValueValid(val) {
-  console.log("validating:" + val);
+// function isValueValid(val) {
+//   console.log("validating:" + val);
 
-  if (typeof val != "string" || val === "") {
-    console.error("you tried to validade a non string value or a empty value");
-    return false;
-  }
-  if (isNaN(val) && isNaN(parseFloat(val))) {
-    console.error(val + " is not a valid number!");
-    return false;
-  }
-  return true;
-}
+//   if (typeof val != "string" || val === "") {
+//     console.error("you tried to validade a non string value or a empty value");
+//     return false;
+//   }
+//   if (isNaN(val) && isNaN(parseFloat(val))) {
+//     console.error(val + " is not a valid number!");
+//     return false;
+//   }
+//   return true;
+// }
 
 //EXECUTE
 initCalculator();
