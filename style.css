@@ -67,7 +67,7 @@ button {
   /* text-size-adjust: ; */
 }
 
-button:hover{
+button:hover {
   filter: brightness(125%);
 }
 
@@ -75,7 +75,12 @@ button:hover{
   background-color: #ffff66;
 }
 
-#clrButton {
+#dotButton {
+  background-color: aquamarine;
+}
+
+#clrButton,
+#backspaceButton {
   background-color: #ff6666;
 }
 
