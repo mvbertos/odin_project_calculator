@@ -2,6 +2,11 @@ let storedVal = "";
 let currentVal = "";
 let currentOp = null;
 
+function initCalculator() {
+  initNumberPad();
+  initOperator();
+}
+
 //Backspace
 const BackspaceButton = document.querySelector("#backspaceButton");
 BackspaceButton.addEventListener("click", () => {
@@ -36,10 +41,39 @@ function onDotButtonPressed() {
 
 //Display
 const display = document.querySelector("#display");
+display.addEventListener("keydown", (event) => {
+  onDisplayeKeydown(event.key);
+});
+display.addEventListener("input", (event) => {
+  onDisplayValueUpdated(event.target.value);
+});
 
-function initCalculator() {
-  initNumberPad();
-  initOperator();
+function onDisplayValueUpdated(value) {
+  //if it has any operator
+  let cleanValue = value.replace(/[a-zA-Z]/g, "");
+  let operators = ["+", "-", "*", "/"];
+  let operator = operators.some((op) => {
+    if (cleanValue.includes(op)) {
+      op = op == "/" ? "÷" : op == "*" ? "x" : op; //simply converting * to x and / to ÷
+      onOperatorPressed(op);
+      display.value = "";
+      return true;
+    }
+    return false;
+  });
+  console.log(operator);
+
+  if (!operator) {
+    //else set value
+    currentVal = cleanValue;
+    display.value = cleanValue;
+  }
+}
+
+function onDisplayeKeydown(key) {
+  if (key == "Enter") {
+    onEqualButtonPressed();
+  }
 }
 
 //OperatorPad
